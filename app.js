@@ -3,7 +3,7 @@ const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors'); // Import cors
 const app = express();
-const port = 3001;
+const port = 3000;
 
 // MySQL connection configuration
 const dbConfig = {
