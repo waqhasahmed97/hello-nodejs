@@ -44,7 +44,7 @@ app.get('/api/check-db', (req, res) => {
     if (err) {
       res.status(500).json({ success: false, message: 'Database connection failed', error: err.message });
     } else {
-      res.status(200).json({ success: true, message: 'RDS MySQL Database is connected', result: results[0].result });
+      res.status(200).json({ success: true, message: 'RDS MySQL Database is connected - test 2', result: results[0].result });
     }
   });
 });
