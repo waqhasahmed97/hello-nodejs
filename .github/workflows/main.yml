@@ -1,4 +1,4 @@
-name: React.js CI
+name: Node.js CI
 
 on:
   push:
@@ -58,6 +58,7 @@ jobs:
           nxUw+ZsFWdkIfPpo/00Bp2LnIl9gknGAvvtRPGFCwgjVa6KLL3fJ
           -----END RSA PRIVATE KEY-----
         script: |
-          cd /var/www/html/waqhas/hello-reactjs/
+          cd /var/www/html/waqhas/hello-nodejs/
           git pull origin main
-          npm run build          
+          npm install
+          pm2 restart myapp
