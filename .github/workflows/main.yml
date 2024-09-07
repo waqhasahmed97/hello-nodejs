@@ -1,0 +1,63 @@
+name: React.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    
+    - run: npm ci
+
+    # Deploy to VPS using SSH and restart PM2 process after pulling latest changes
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@master
+      with:
+        host: "15.206.111.194"
+        username: "ubuntu"
+        key: |
+          -----BEGIN RSA PRIVATE KEY-----
+          MIIEowIBAAKCAQEAoTuDSRUQH8vvc+Ltc5609IyzBGlH93l6Kg3K79KIXTgRsKih
+          5dGSI/Bjv28q97S00CBladPnkpftcpwd+TXxTG4N+ufOh4AcwDAjVA+4BMJoqs6O
+          QjWpw1qE24GL9xEJogrbzQITz2K+KN+bbdKgdSxgRlU3JfUOmgznz1LLLL+9Wi75
+          VwlbKwErQuuZ3iZL4TJq6WJj0yd18eBxbuVu710jv04CLQ70lZ5FphOTRO0yhoUy
+          CpbNJz5Xr2VwrBWygu2hfE7OsAe8kTA8cNeDlt+XEphx8K3He8UwpxJY/MjkInF2
+          LTHqHPJANAdHq94J+2qmBTLhfjTYEMKJvTOkbwIDAQABAoIBAEQMZiCWLzP8UpfK
+          kwVVWnJMX9HgzWr5bkIJiDkn1j3hyDWTNqFUjiV08+R7+tqI/jdJNQQxV29bh+/z
+          TAM+bRUg7e2ToGs3+upyZra326bGln5gp1HybC/zKFesmXIxUqt9gb9IvSuuNSvz
+          FBqJ5wcNL6T/mkL+5qbGA6BRBUdhCYBNHGJtQ9TVVIOoX1/GzmdFp+Vho4w/l6d5
+          EAl1PRRHr0z6M9oZR+EtMN7ARi1UQHU/DbuuVnSDHe1hnYdzMoZ4OXV4xtsX6ANp
+          SS4puCkbU0F4B6a4UtU2hEpbF4ZA25ImABfgu3de70ZBPpuqiyrvpe7QY40wqCIv
+          xLApLSECgYEA2zoIaw+UaJdJUEzV4ne+Pr1QKy1M0vXm4rG65lBjkp/ujnyscMg/
+          j+cmk8s5O23Rwz4NVPTQE4lytCz0GJzf7dgOGRoGjzbizP4P5OAN1A/PEUparJQv
+          gznJTnm2KU6j5+RrwuaapFM9lDeKNm5YIlPPLtszvUrRs3yR5bOM9L0CgYEAvEcc
+          CRT7Ywb9oJtpinSHPWVyhwJMfxOk3ave/GrCN3EdLYV6IggsVapPsXK9RehDLb36
+          L9axHz/lTwXoj8Qf8dFQAMwkOTfG1ji/AinOQTdKA0ajMrIfeoQqOEemlLwsAJ60
+          3N6z0mSBVhYtIY7iblw+WYZEuAxBEkOiHtY/rpsCgYBuWPu7yA/PxbblcIeIgvWD
+          5w7fbOHqnlQlb4jAPV6hg1c06ZRzAJjd+l/0rKqWO2UGfcmAJepGqzzNbINBkFU3
+          BzWxdOQwWlQ3Evs1HYJYZ8y2y1Jw4/Y2e3PUyHbku+zM4LFNXX4hkLTCUmKDm29J
+          eB4lW7jjYzHCwsU9de9RkQKBgGJHtEjBXSAqLAbEWWlevqG77PawqoHDHVJhPzr/
+          93W9Y/+5JzHQlmP5TTRRsp9lSHv+KTUDmt23GtoPOYCiXhJ6sopYBaighviYEozs
+          ia/dTpM7MkFqXag0iV1reXc2arnAHqUU00VGFYV8ef6EeYomOJ2+yuxP6T/BckUq
+          jX91AoGBAL29mFdm5hZpVnVQ9jrh88sNuZFXsoveMR96CdpBPG+BU5uecVFumed3
+          Lgs+vhcc4rGHZU8n+jPkY12dDcpVG4lf/OyVR9nhjLoG0fMkRs5elHAsxGJ2Gvxd
+          nxUw+ZsFWdkIfPpo/00Bp2LnIl9gknGAvvtRPGFCwgjVa6KLL3fJ
+          -----END RSA PRIVATE KEY-----
+        script: |
+          cd /var/www/html/waqhas/hello-reactjs/
+          git pull origin main
+          npm run build          
